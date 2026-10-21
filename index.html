@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BNCC Naval Wing Platoon – Navy Anchorage School and College Khulna</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:   #0a1628;
+      --navy2:  #0d2248;
+      --gold:   #c9a84c;
+      --gold2:  #e8c96a;
+      --white:  #f0f4ff;
+      --gray:   #8a9bb5;
+      --slide-w: 960px;
+      --slide-h: 540px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #04091a 0%, #0d2248 60%, #1a3a6b 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 28px 32px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .header-inner { max-width: 900px; margin: 0 auto; }
+    .header-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--white);
+      line-height: 1.2;
+    }
+    header p {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--gray);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Navigation Controls ── */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px 24px;
+      background: rgba(10,22,40,0.9);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+    .nav-btn {
+      background: rgba(201,168,76,0.12);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 8px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--gold); color: var(--navy); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .slide-counter {
+      font-size: 13px;
+      color: var(--gray);
+      min-width: 90px;
+      text-align: center;
+    }
+    .progress-bar {
+      flex: 1;
+      max-width: 300px;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    /* ── Slide Viewer ── */
+    .viewer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px;
+      min-height: calc(100vh - 160px);
+    }
+    .slide-wrapper {
+      width: 100%;
+      max-width: var(--slide-w);
+      position: relative;
+    }
+
+    /* ── Slide Styles ── */
+    .slide {
+      display: none;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      position: relative;
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .slide.active { display: block; }
+
+    /* Full-image slide */
+    .slide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #04091a;
+    }
+
+    /* Text-based slide */
+    .slide-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide-content::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #04091a 0%, #0d2248 50%, #1a3a6b 100%);
+      z-index: 0;
+    }
+    .slide-content::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: -40px;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .slide-content > * { position: relative; z-index: 1; }
+
+    .slide-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .slide-title {
+      font-size: clamp(22px, 4vw, 42px);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .slide-subtitle {
+      font-size: clamp(13px, 2vw, 18px);
+      color: var(--gray);
+      line-height: 1.5;
+    }
+    .slide-motto {
+      margin-top: 24px;
+      padding: 14px 24px;
+      border-left: 3px solid var(--gold);
+      background: rgba(201,168,76,0.07);
+      border-radius: 0 8px 8px 0;
+    }
+    .slide-motto .motto-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .slide-motto .motto-text {
+      font-size: clamp(14px, 2.2vw, 20px);
+      font-weight: 600;
+      color: var(--white);
+      font-style: italic;
+    }
+
+    /* Stats slide */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 10px;
+      padding: 20px 12px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--gray);
+      margin-top: 6px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .inaug-date {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 8px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .inaug-date .id-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .inaug-date .id-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* Bullet list slides */
+    .bullet-list {
+      list-style: none;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: clamp(12px, 1.8vw, 16px);
+      color: #c5d4e8;
+      line-height: 1.5;
+    }
+    .bullet-list li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-top: 6px;
+    }
+
+    /* Card grid slides */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 10px;
+      padding: 18px 16px;
+    }
+    .card-title {
+      font-size: clamp(11px, 1.5vw, 14px);
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+    .card-body {
+      font-size: clamp(10px, 1.3vw, 13px);
+      color: #a0b4cc;
+      line-height: 1.5;
+    }
+
+    /* Photo + caption slides */
+    .photo-slide {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .photo-side {
+      position: relative;
+      overflow: hidden;
+    }
+    .photo-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .caption-side {
+      background: linear-gradient(135deg, #04091a, #0d2248);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 36px 32px;
+    }
+    .caption-tag {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .caption-title {
+      font-size: clamp(18px, 2.8vw, 30px);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .caption-desc {
+      font-size: clamp(11px, 1.5vw, 14px);
+      color: #a0b4cc;
+      line-height: 1.6;
+    }
+
+    /* Closing slides */
+    .closing-slide {
+      background: linear-gradient(135deg, #04091a 0%, #0d2248 60%, #1a3a6b 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px;
+      gap: 20px;
+    }
+    .closing-slide .big-text {
+      font-size: clamp(28px, 5vw, 60px);
+      font-weight: 900;
+      color: var(--gold);
+    }
+    .closing-slide .sub-text {
+      font-size: clamp(12px, 1.8vw, 18px);
+      color: #a0b4cc;
+      max-width: 640px;
+      line-height: 1.7;
+    }
+    .gold-line {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      border-radius: 2px;
+    }
+
+    /* ── Caption below slide ── */
+    .slide-caption-bar {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--gray);
+      letter-spacing: 0.3px;
+    }
+    .slide-caption-bar strong {
+      color: var(--gold2);
+      font-weight: 600;
+    }
+
+    /* ── Thumbnail strip ── */
+    .thumb-section {
+      max-width: var(--slide-w);
+      width: 100%;
+      margin-top: 28px;
+    }
+    .thumb-section h3 {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--gray);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .thumb-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+    }
+    .thumb-strip::-webkit-scrollbar { height: 4px; }
+    .thumb-strip::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    .thumb-strip::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+    .thumb {
+      flex-shrink: 0;
+      width: 80px;
+      height: 45px;
+      border-radius: 5px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+      scroll-snap-align: start;
+      background: #0a1628;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb:hover { transform: scale(1.05); border-color: rgba(201,168,76,0.5); }
+    .thumb.active { border-color: var(--gold); }
+    .thumb .thumb-num {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 11px;
+      color: rgba(138,155,181,0.5);
+      border-top: 1px solid rgba(201,168,76,0.1);
+      margin-top: 24px;
+    }
+
+    /* ── Keyboard hint ── */
+    .key-hint {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 11px;
+      color: rgba(138,155,181,0.5);
+      background: rgba(10,22,40,0.8);
+      border: 1px solid rgba(201,168,76,0.1);
+      padding: 8px 12px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    /* ── Fullscreen ── */
+    .btn-fullscreen {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gray);
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .btn-fullscreen:hover { border-color: var(--gold); color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="header-inner">
+    <div class="header-badge">Bangladesh National Cadet Corps</div>
+    <h1>Navy Anchorage School and College Khulna<br>BNCC Naval Wing Platoon</h1>
+    <p>Official Inauguration &amp; Activities — 18 September 2025</p>
+  </div>
+</header>
+
+<!-- ── Navigation ── -->
+<div class="nav-bar">
+  <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)">&#8592; Prev</button>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <span class="slide-counter" id="counter">1 / 37</span>
+  <div class="progress-bar"><div class="progress-fill" id="progress2"></div></div>
+  <button class="nav-btn" id="btn-next" onclick="changeSlide(1)">Next &#8594;</button>
+  <button class="btn-fullscreen" onclick="toggleFullscreen()" title="Toggle fullscreen">⛶</button>
+</div>
+
+<!-- ── Main Viewer ── -->
+<div class="viewer">
+  <div class="slide-wrapper">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active" id="slide-1">
+      <div class="slide-content">
+        <div class="slide-badge">Official Inauguration</div>
+        <div class="slide-title">Bangladesh National Cadet Corps<br><span style="color:var(--gold)">Naval Wing Platoon</span></div>
+        <div class="slide-subtitle">Navy Anchorage School and College, Khulna</div>
+        <div class="slide-motto">
+          <div class="motto-label">BNCC Motto</div>
+          <div class="motto-text">Discipline, Knowledge, Volunteerism</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Stats -->
+    <div class="slide" id="slide-2">
+      <div class="slide-content">
+        <div class="slide-badge">Overview</div>
+        <div class="slide-title">Platoon at a Glance</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">59</div>
+            <div class="stat-label">Total Cadets</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">51</div>
+            <div class="stat-label">Male Cadets</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Female Cadets</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Platoons</div>
+          </div>
+        </div>
+        <div class="inaug-date">
+          <span class="id-label">Inauguration Date</span>
+          <span class="id-value">18 September 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Core Objectives -->
+    <div class="slide" id="slide-3">
+      <div class="slide-content">
+        <div class="slide-badge">Mission</div>
+        <div class="slide-title">Core Objectives &amp; Identity</div>
+        <ul class="bullet-list">
+          <li>Established to develop leadership, character, and discipline among students.</li>
+          <li>Operating under the strict supervision of the Bangladesh Navy.</li>
+          <li>Training cadets to stand as the second line of defense for the nation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDES 4–16: Photo slides (Inauguration Day) -->
+    <div class="slide" id="slide-4">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image13.jpeg" alt="Warm Welcome" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Warm Welcome</div>
+          <div class="caption-desc">Cadets welcome the chief guest with a bouquet on arrival.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-5">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image15.jpeg" alt="Pilot Drill" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Pilot Drill</div>
+          <div class="caption-desc">Cadets present a guard of honour beside the red carpet as officers inspect the line.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-6">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image16.jpeg" alt="Guard of Honour" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Guard of Honour</div>
+          <div class="caption-desc">Pilot drill during the Guard of Honour, performed with discipline and precision.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-7">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image18.jpeg" alt="Thanksgiving" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Thanksgiving</div>
+          <div class="caption-desc">Officers visit the platoon and are greeted by cadets in ceremonial uniform.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-8">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image19.jpeg" alt="Flag Hoisting" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Flag Hoisting</div>
+          <div class="caption-desc">The flag is hoisted as cadets and officers stand at attention.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-9">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image21.jpeg" alt="Visitors Book" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Visitors' Book</div>
+          <div class="caption-desc">The chief guest signs the visitors' book as officers look on.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-10">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image23.jpeg" alt="Tree Plantation" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Tree Plantation</div>
+          <div class="caption-desc">Officers plant a sapling and water it to mark the inauguration.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-11">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image25.jpeg" alt="Inauguration Ceremony" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Inauguration Ceremony</div>
+          <div class="caption-desc">Officers, teachers and guests gather in the hall for the formal inauguration.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-12">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image27.jpeg" alt="Souvenir Presentation" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Souvenir Presentation</div>
+          <div class="caption-desc">A framed painting is presented to the chief guest as a souvenir.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-13">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image29.jpeg" alt="Cake Cutting" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Cake Cutting</div>
+          <div class="caption-desc">Cadets and officers cut the cake together to celebrate the inauguration.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-14">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image31.jpeg" alt="Guests and Officers" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Guests and Officers</div>
+          <div class="caption-desc">Guests and officers gather at the building entrance beneath a decorated canopy.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-15">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image33.jpeg" alt="Taking the Salute" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Taking the Salute</div>
+          <div class="caption-desc">Officers stand on the dais to take the salute during the ceremony.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-16">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image35.jpeg" alt="Platoon Formation" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Inauguration Day</div>
+          <div class="caption-title">Platoon Formation</div>
+          <div class="caption-desc">Cadets stand in ceremonial formation with officers and guests behind them.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 17: Training Info -->
+    <div class="slide" id="slide-17">
+      <div class="slide-content">
+        <div class="slide-badge">Training Programme</div>
+        <div class="slide-title">Military &amp; Physical Training</div>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">⚓ Regular Drill Practice</div>
+            <div class="card-body">Perfecting march pasts and ceremonial parade movements.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">💪 Physical Fitness</div>
+            <div class="card-body">Endurance building, stretching, and tactical exercises.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">🧭 Naval Knowledge</div>
+            <div class="card-body">Basic seamanship, naval traditions, and maritime history.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDES 18–22: Activity photo slides -->
+    <div class="slide" id="slide-18">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image40.jpeg" alt="Medical Test" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Training Activities</div>
+          <div class="caption-title">Medical Test</div>
+          <div class="caption-desc">Cadets of the platoon lined up for their medical test.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-19">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image41.jpeg" alt="Fire Fighting Training" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Training Activities</div>
+          <div class="caption-title">Fire Fighting Training</div>
+          <div class="caption-desc">Cadets taking part in fire fighting training.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-20">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image42.jpeg" alt="Annual Parade Display" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Training Activities</div>
+          <div class="caption-title">Annual Parade Display</div>
+          <div class="caption-desc">Cadets presenting a display during the annual parade.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-21">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image43.png" alt="Firing Practice" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Training Activities</div>
+          <div class="caption-title">Firing Practice</div>
+          <div class="caption-desc">Our TUO Shamim Sir during firing practice.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-22">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image44.png" alt="Senior Division Firing" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Training Activities</div>
+          <div class="caption-title">Senior Division Firing</div>
+          <div class="caption-desc">Senior Division cadets taking part in firing.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 23: Beyond Parade Ground -->
+    <div class="slide" id="slide-23">
+      <div class="slide-content">
+        <div class="slide-badge">Community &amp; Career</div>
+        <div class="slide-title">Beyond the Parade Ground</div>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">🤝 Community Outreach</div>
+            <div class="card-body">Actively participating in national campaigns, blood donations, and disaster relief.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">🏕️ Annual Camps</div>
+            <div class="card-body">Attending central BNCC camps to compete with platoons nationwide.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">🎖️ Career Pathways</div>
+            <div class="card-body">Grooming exceptional cadets for future officer recruitment in the Bangladesh Armed Forces.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDES 24–35: Event photo slides -->
+    <div class="slide" id="slide-24">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image47.jpeg" alt="Dengue Prevention" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Community Service</div>
+          <div class="caption-title">Dengue Prevention</div>
+          <div class="caption-desc">Cadets and officers, including Lt Col Masud Rayhan, take part in the dengue prevention programme.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-25">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image49.png" alt="Central Camp 1" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">National Camps</div>
+          <div class="caption-title">Central Camp 1</div>
+          <div class="caption-desc">Our TUO Shamim Sir, who attended Central Camp 1.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-26">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image50.jpeg" alt="BNCC Central Camp 03" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">National Camps</div>
+          <div class="caption-title">BNCC Central Camp 03</div>
+          <div class="caption-desc">Our cadets took part in the central camp and its closing parade, alongside platoons from across the country.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-27">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image52.png" alt="National Camp Independence Day" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">National Camps</div>
+          <div class="caption-title">National Camp of Independence Day</div>
+          <div class="caption-desc">Cadets of the platoon at the National Camp.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-28">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image53.jpeg" alt="Battalion Camp 1" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Battalion Camps</div>
+          <div class="caption-title">Battalion Camp 1</div>
+          <div class="caption-desc">Cadets of the platoon taking part in Battalion Camp 1.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-29">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image55.jpeg" alt="Battalion Camp 2" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Battalion Camps</div>
+          <div class="caption-title">Battalion Camp 2</div>
+          <div class="caption-desc">Cadets of the platoon taking part in Battalion Camp 2.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-30">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image56.png" alt="Battalion Camp 3" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Battalion Camps</div>
+          <div class="caption-title">Battalion Camp 3</div>
+          <div class="caption-desc">Cadets of the platoon taking part in Battalion Camp 3.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-31">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image57.jpeg" alt="Flotilla Commander Visit" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Special Visits</div>
+          <div class="caption-title">Visit of Flotilla Commander</div>
+          <div class="caption-desc">Cadets stood in formal ceremonial order to receive the Flotilla Commander on arrival.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-32">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image58.jpeg" alt="Annual Armed Forces Day" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Special Events</div>
+          <div class="caption-title">Annual Armed Forces Day</div>
+          <div class="caption-desc">Platoon cadets and officers marking Armed Forces Day.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-33">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image59.jpeg" alt="Cox's Bazar Tour" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Central Camp 3</div>
+          <div class="caption-title">Cox's Bazar Tour</div>
+          <div class="caption-desc">A tour of Cox's Bazar at the invitation of the DG, Brigadier General Abu Sayed Al Masud, BGBMS, PBGMS, ndc, psc.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-34">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image60.jpeg" alt="Farewell to Chief Instructor" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Memorable Moments</div>
+          <div class="caption-title">Farewell to Our Chief Instructor</div>
+          <div class="caption-desc">Cadets gathered to bid Chief Instructor Hasan Sir farewell, with flowers and a gift.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="slide-35">
+      <div class="photo-slide">
+        <div class="photo-side"><img src="media/image61.png" alt="New Flotilla Commander" loading="lazy"></div>
+        <div class="caption-side">
+          <div class="caption-tag">Special Visits</div>
+          <div class="caption-title">Visit of the New Flotilla Commander</div>
+          <div class="caption-desc">Our new Flotilla Commander visited the platoon and was welcomed by the cadets with a bouquet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 36: Closing -->
+    <div class="slide" id="slide-36">
+      <div class="slide-content" style="text-align:center; align-items:center; justify-content:center;">
+        <div class="slide-badge">Closing</div>
+        <div class="slide-title" style="text-align:center;">Joining the Ranks</div>
+        <div class="gold-line" style="margin: 16px auto;"></div>
+        <div class="slide-subtitle" style="text-align:center; max-width:520px;">
+          We honor the dedication, discipline, and spirit of service shown by every cadet of the Navy Anchorage School and College Khulna BNCC Platoon. Their commitment today shapes the leaders and guardians of tomorrow.
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 37: Thank You -->
+    <div class="slide" id="slide-37">
+      <div class="closing-slide">
+        <div class="gold-line"></div>
+        <div class="big-text">Thank You!</div>
+        <div class="sub-text">
+          A heartfelt thanks to BNCC for providing us with such an incredible opportunity to grow, serve, and shine.
+        </div>
+        <div class="slide-motto" style="max-width:400px;">
+          <div class="motto-label">BNCC Motto</div>
+          <div class="motto-text">Discipline, Knowledge, Volunteerism</div>
+        </div>
+        <div class="gold-line"></div>
+      </div>
+    </div>
+
+  </div><!-- /slide-wrapper -->
+
+  <!-- Caption -->
+  <div class="slide-caption-bar" id="slide-caption">
+    <strong>Slide 1 of 37</strong> — OFFICIAL INAUGURATION
+  </div>
+
+  <!-- Thumbnail strip -->
+  <div class="thumb-section">
+    <h3>ALL SLIDES</h3>
+    <div class="thumb-strip" id="thumb-strip"></div>
+  </div>
+</div><!-- /viewer -->
+
+<footer>
+  Bangladesh National Cadet Corps · Naval Wing Platoon · Navy Anchorage School and College, Khulna &nbsp;|&nbsp; Inaugurated 18 September 2025
+</footer>
+
+<div class="key-hint">← → Arrow keys to navigate</div>
+
+<script>
+  const TOTAL = 37;
+  let current = 1;
+
+  const captions = [
+    "OFFICIAL INAUGURATION — BNCC Naval Wing Platoon",
+    "Platoon at a Glance — 59 Cadets, 2 Platoons",
+    "Core Objectives & Identity",
+    "Warm Welcome — Inauguration Day",
+    "Pilot Drill — Inauguration Day",
+    "Guard of Honour — Inauguration Day",
+    "Thanksgiving — Inauguration Day",
+    "Flag Hoisting — Inauguration Day",
+    "Visitors' Book — Inauguration Day",
+    "Tree Plantation — Inauguration Day",
+    "Inauguration Ceremony — Inauguration Day",
+    "Souvenir Presentation — Inauguration Day",
+    "Cake Cutting — Inauguration Day",
+    "Guests and Officers — Inauguration Day",
+    "Taking the Salute — Inauguration Day",
+    "Platoon Formation — Inauguration Day",
+    "Military & Physical Training Programme",
+    "Medical Test — Training Activities",
+    "Fire Fighting Training",
+    "Annual Parade Display",
+    "Firing Practice — TUO Shamim Sir",
+    "Senior Division Firing",
+    "Beyond the Parade Ground — Community & Career",
+    "Dengue Prevention — Community Service",
+    "Central Camp 1",
+    "BNCC Central Camp 03 — Central Camping 2025/26",
+    "National Camp of Independence Day",
+    "Battalion Camp 1",
+    "Battalion Camp 2",
+    "Battalion Camp 3",
+    "Visit of Flotilla Commander",
+    "Annual Armed Forces Day",
+    "Cox's Bazar Tour — Central Camp 3",
+    "Farewell to Our Chief Instructor Hasan Sir",
+    "Visit of the New Flotilla Commander",
+    "Joining the Ranks",
+    "Thank You!"
+  ];
+
+  // Thumbnail images (first photo image per slide, null = text-only)
+  const thumbImages = [
+    null, null, null,
+    "media/image13.jpeg","media/image15.jpeg","media/image16.jpeg",
+    "media/image18.jpeg","media/image19.jpeg","media/image21.jpeg",
+    "media/image23.jpeg","media/image25.jpeg","media/image27.jpeg",
+    "media/image29.jpeg","media/image31.jpeg","media/image33.jpeg",
+    "media/image35.jpeg", null,
+    "media/image40.jpeg","media/image41.jpeg","media/image42.jpeg",
+    "media/image43.png","media/image44.png", null,
+    "media/image47.jpeg","media/image49.png","media/image50.jpeg",
+    "media/image52.png","media/image53.jpeg","media/image55.jpeg",
+    "media/image56.png","media/image57.jpeg","media/image58.jpeg",
+    "media/image59.jpeg","media/image60.jpeg","media/image61.png",
+    null, null
+  ];
+
+  function goTo(n) {
+    if (n < 1 || n > TOTAL) return;
+    document.getElementById('slide-' + current).classList.remove('active');
+    document.querySelectorAll('.thumb')[current-1].classList.remove('active');
+    current = n;
+    document.getElementById('slide-' + current).classList.add('active');
+    document.querySelectorAll('.thumb')[current-1].classList.add('active');
+    scrollThumbIntoView(current-1);
+
+    const pct = ((current / TOTAL) * 100).toFixed(1) + '%';
+    document.getElementById('progress').style.width = pct;
+    document.getElementById('progress2').style.width = pct;
+    document.getElementById('counter').textContent = current + ' / ' + TOTAL;
+    document.getElementById('btn-prev').disabled = current === 1;
+    document.getElementById('btn-next').disabled = current === TOTAL;
+    document.getElementById('slide-caption').innerHTML =
+      '<strong>Slide ' + current + ' of ' + TOTAL + '</strong> — ' + captions[current-1];
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  function scrollThumbIntoView(idx) {
+    const strip = document.getElementById('thumb-strip');
+    const thumb = strip.children[idx];
+    if (thumb) thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  // Build thumbnails
+  const strip = document.getElementById('thumb-strip');
+  for (let i = 0; i < TOTAL; i++) {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (i === 0 ? ' active' : '');
+    t.title = 'Slide ' + (i+1);
+    if (thumbImages[i]) {
+      const img = document.createElement('img');
+      img.src = thumbImages[i];
+      img.alt = 'Slide ' + (i+1);
+      img.loading = 'lazy';
+      t.appendChild(img);
+    } else {
+      const num = document.createElement('span');
+      num.className = 'thumb-num';
+      num.textContent = i+1;
+      t.appendChild(num);
+    }
+    t.addEventListener('click', () => goTo(i+1));
+    strip.appendChild(t);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+    if (e.key === 'Home') goTo(1);
+    if (e.key === 'End')  goTo(TOTAL);
+  });
+
+  // Fullscreen
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  // Init
+  goTo(1);
+</script>
+</body>
+</html>
