@@ -68,35 +68,42 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 14px 24px;
-      background: rgba(10,22,40,0.9);
+      gap: 14px;
+      padding: 10px 24px;
+      background: rgba(10,22,40,0.95);
       border-bottom: 1px solid rgba(201,168,76,0.2);
     }
     .nav-btn {
       background: rgba(201,168,76,0.12);
       border: 1px solid var(--gold);
       color: var(--gold);
-      padding: 8px 20px;
+      padding: 7px 20px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .nav-btn:hover { background: var(--gold); color: var(--navy); }
     .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .slide-counter {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--gray);
-      min-width: 90px;
-      text-align: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    /* Single progress bar that spans full width */
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
     }
     .progress-bar {
-      flex: 1;
-      max-width: 300px;
-      height: 4px;
-      background: rgba(255,255,255,0.1);
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
       border-radius: 2px;
       overflow: hidden;
     }
@@ -104,7 +111,7 @@
       height: 100%;
       background: linear-gradient(90deg, var(--gold), var(--gold2));
       border-radius: 2px;
-      transition: width 0.3s ease;
+      transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
     }
 
     /* ── Slide Viewer ── */
@@ -121,6 +128,20 @@
       position: relative;
     }
 
+    /* ── Slide Animations ── */
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(60px) scale(0.97); }
+      to   { opacity: 1; transform: translateX(0)    scale(1); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-60px) scale(0.97); }
+      to   { opacity: 1; transform: translateX(0)     scale(1); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     /* ── Slide Styles ── */
     .slide {
       display: none;
@@ -132,7 +153,36 @@
       position: relative;
       border: 1px solid rgba(201,168,76,0.2);
     }
-    .slide.active { display: block; }
+    .slide.active {
+      display: block;
+      animation: slideInRight 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both;
+    }
+    .slide.prev-exit {
+      display: block;
+      animation: slideOutLeft 0.3s ease-in both;
+    }
+    @keyframes slideOutLeft {
+      from { opacity: 1; transform: translateX(0)     scale(1); }
+      to   { opacity: 0; transform: translateX(-40px) scale(0.97); }
+    }
+    @keyframes slideOutRight {
+      from { opacity: 1; transform: translateX(0)    scale(1); }
+      to   { opacity: 0; transform: translateX(40px) scale(0.97); }
+    }
+    /* Animate text content inside slides */
+    .slide.active .slide-badge   { animation: fadeInUp 0.5s 0.1s both; }
+    .slide.active .slide-title   { animation: fadeInUp 0.5s 0.18s both; }
+    .slide.active .slide-subtitle{ animation: fadeInUp 0.5s 0.26s both; }
+    .slide.active .slide-motto   { animation: fadeInUp 0.5s 0.34s both; }
+    .slide.active .stats-grid    { animation: fadeInUp 0.5s 0.22s both; }
+    .slide.active .bullet-list   { animation: fadeInUp 0.5s 0.22s both; }
+    .slide.active .card-grid     { animation: fadeInUp 0.5s 0.22s both; }
+    .slide.active .inaug-date    { animation: fadeInUp 0.5s 0.34s both; }
+    .slide.active .photo-side    { animation: fadeInUp 0.4s 0.08s both; }
+    .slide.active .caption-side  { animation: fadeInUp 0.5s 0.22s both; }
+    .slide.active .big-text      { animation: fadeInUp 0.6s 0.1s both; }
+    .slide.active .sub-text      { animation: fadeInUp 0.6s 0.25s both; }
+    .slide.active .gold-line     { animation: fadeInUp 0.6s 0.05s both; }
 
     /* Full-image slide */
     .slide-img {
@@ -505,9 +555,10 @@
 <!-- ── Navigation ── -->
 <div class="nav-bar">
   <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)">&#8592; Prev</button>
-  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  </div>
   <span class="slide-counter" id="counter">1 / 37</span>
-  <div class="progress-bar"><div class="progress-fill" id="progress2"></div></div>
   <button class="nav-btn" id="btn-next" onclick="changeSlide(1)">Next &#8594;</button>
   <button class="btn-fullscreen" onclick="toggleFullscreen()" title="Toggle fullscreen">⛶</button>
 </div>
@@ -1000,6 +1051,7 @@
 <script>
   const TOTAL = 37;
   let current = 1;
+  let isAnimating = false;
 
   const captions = [
     "OFFICIAL INAUGURATION — BNCC Naval Wing Platoon",
@@ -1058,26 +1110,44 @@
     null, null
   ];
 
-  function goTo(n) {
-    if (n < 1 || n > TOTAL) return;
-    document.getElementById('slide-' + current).classList.remove('active');
-    document.querySelectorAll('.thumb')[current-1].classList.remove('active');
-    current = n;
-    document.getElementById('slide-' + current).classList.add('active');
-    document.querySelectorAll('.thumb')[current-1].classList.add('active');
-    scrollThumbIntoView(current-1);
+  function goTo(n, dir) {
+    if (n < 1 || n > TOTAL || n === current) return;
+    const prevSlide = document.getElementById('slide-' + current);
+    const nextSlide = document.getElementById('slide-' + n);
 
-    const pct = ((current / TOTAL) * 100).toFixed(1) + '%';
-    document.getElementById('progress').style.width = pct;
-    document.getElementById('progress2').style.width = pct;
-    document.getElementById('counter').textContent = current + ' / ' + TOTAL;
-    document.getElementById('btn-prev').disabled = current === 1;
-    document.getElementById('btn-next').disabled = current === TOTAL;
-    document.getElementById('slide-caption').innerHTML =
-      '<strong>Slide ' + current + ' of ' + TOTAL + '</strong> — ' + captions[current-1];
+    // Determine direction for animation
+    const goingForward = (dir !== undefined) ? dir > 0 : n > current;
+
+    // Animate out old slide
+    prevSlide.style.animation = goingForward
+      ? 'slideOutLeft 0.3s ease-in both'
+      : 'slideOutRight 0.3s ease-in both';
+
+    setTimeout(() => {
+      prevSlide.classList.remove('active');
+      prevSlide.style.animation = '';
+      // Update thumbs
+      document.querySelectorAll('.thumb')[current-1].classList.remove('active');
+      current = n;
+      // Animate in new slide
+      nextSlide.style.animation = goingForward
+        ? 'slideInRight 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both'
+        : 'slideInLeft 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both';
+      nextSlide.classList.add('active');
+      document.querySelectorAll('.thumb')[current-1].classList.add('active');
+      scrollThumbIntoView(current-1);
+
+      const pct = ((current / TOTAL) * 100).toFixed(1) + '%';
+      document.getElementById('progress').style.width = pct;
+      document.getElementById('counter').textContent = current + ' / ' + TOTAL;
+      document.getElementById('btn-prev').disabled = current === 1;
+      document.getElementById('btn-next').disabled = current === TOTAL;
+      document.getElementById('slide-caption').innerHTML =
+        '<strong>Slide ' + current + ' of ' + TOTAL + '</strong> — ' + captions[current-1];
+    }, 280);
   }
 
-  function changeSlide(dir) { goTo(current + dir); }
+  function changeSlide(dir) { goTo(current + dir, dir); }
 
   function scrollThumbIntoView(idx) {
     const strip = document.getElementById('thumb-strip');
@@ -1103,7 +1173,7 @@
       num.textContent = i+1;
       t.appendChild(num);
     }
-    t.addEventListener('click', () => goTo(i+1));
+    t.addEventListener('click', () => goTo(i+1, i+1 > current ? 1 : -1));
     strip.appendChild(t);
   }
 
@@ -1111,8 +1181,8 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
     if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
-    if (e.key === 'Home') goTo(1);
-    if (e.key === 'End')  goTo(TOTAL);
+    if (e.key === 'Home') goTo(1, -1);
+    if (e.key === 'End')  goTo(TOTAL, 1);
   });
 
   // Fullscreen
@@ -1124,8 +1194,14 @@
     }
   }
 
-  // Init
-  goTo(1);
+  // Init — show slide 1 immediately without transition
+  document.getElementById('slide-1').classList.add('active');
+  document.querySelectorAll('.thumb')[0].classList.add('active');
+  document.getElementById('progress').style.width = ((1/TOTAL)*100).toFixed(1)+'%';
+  document.getElementById('counter').textContent = '1 / ' + TOTAL;
+  document.getElementById('btn-prev').disabled = true;
+  document.getElementById('slide-caption').innerHTML =
+    '<strong>Slide 1 of ' + TOTAL + '</strong> — ' + captions[0];
 </script>
 </body>
 </html>
