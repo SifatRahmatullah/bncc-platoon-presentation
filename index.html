@@ -814,16 +814,279 @@
       background: rgba(201,168,76,0.1);
       border: 1px solid rgba(201,168,76,0.3);
       color: var(--gold);
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 15px;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .btn-fullscreen:hover {
       background: var(--gold);
       color: var(--navy);
       border-color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════
+       FULLSCREEN OVERRIDES & FALLBACK
+    ══════════════════════════════════════ */
+    body.css-fullscreen {
+      overflow-y: auto !important;
+    }
+    body.css-fullscreen header,
+    body.css-fullscreen footer,
+    body.css-fullscreen .thumb-section,
+    body.css-fullscreen .key-hint {
+      display: none !important;
+    }
+    body.css-fullscreen .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    body.css-fullscreen .viewer {
+      padding: 10px 8px !important;
+      min-height: calc(100vh - 65px) !important;
+      justify-content: center !important;
+    }
+    body.css-fullscreen .slide-wrapper {
+      max-width: 98vw !important;
+      width: 98vw !important;
+    }
+    body.css-fullscreen .slide {
+      max-height: calc(100vh - 80px) !important;
+    }
+
+    :fullscreen .slide-wrapper,
+    :-webkit-full-screen .slide-wrapper {
+      max-width: 98vw !important;
+    }
+    :fullscreen .viewer,
+    :-webkit-full-screen .viewer {
+      padding: 10px !important;
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE DESIGN (ALL DISPLAY SIZES)
+    ══════════════════════════════════════ */
+    /* Tablets / Medium Laptops (769px - 1024px) */
+    @media (max-width: 1024px) {
+      .slide-wrapper {
+        max-width: 96vw;
+      }
+      .photo-slide {
+        grid-template-columns: 52fr 48fr;
+      }
+      .stats-grid {
+        gap: 14px;
+      }
+      .stat-card {
+        padding: 22px 12px;
+      }
+      .stat-number {
+        font-size: clamp(32px, 4vw, 52px);
+      }
+      .card-grid {
+        gap: 14px;
+      }
+      .card {
+        padding: 22px 18px;
+      }
+    }
+
+    /* Mobile Phones & Portrait Tablets (<= 768px) */
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 16px 10px;
+      }
+      header .header-badge {
+        font-size: 9px;
+        letter-spacing: 2px;
+        padding: 2px 8px;
+        margin-bottom: 4px;
+      }
+      header h1 {
+        font-size: 15px;
+      }
+      header p {
+        display: none; /* Conserve vertical space */
+      }
+      .nav-bar {
+        padding: 8px 12px;
+        gap: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+        min-height: 38px;
+      }
+      .slide-counter {
+        font-size: 11px;
+      }
+      .viewer {
+        padding: 10px 8px 24px;
+        min-height: auto;
+      }
+      .slide-wrapper {
+        width: 100%;
+        max-width: 100%;
+      }
+      .slide {
+        aspect-ratio: auto;
+        min-height: 540px;
+        border-radius: 12px;
+      }
+      .photo-slide {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(220px, 42vh) auto;
+        height: auto;
+        min-height: 540px;
+      }
+      .photo-side {
+        min-height: 220px;
+      }
+      .photo-side img {
+        height: 100%;
+        max-height: 42vh;
+      }
+      .photo-side::before, .photo-side::after {
+        width: 20px;
+        height: 20px;
+      }
+      .caption-side {
+        padding: 22px 18px 28px;
+      }
+      .caption-tag {
+        font-size: 10px;
+        padding: 3px 12px;
+        margin-bottom: 10px;
+      }
+      .caption-title {
+        font-size: 22px;
+      }
+      .caption-desc {
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 8px;
+      }
+      .slide-content {
+        padding: 28px 20px;
+        min-height: 540px;
+      }
+      .slide-badge {
+        font-size: 10px;
+        padding: 4px 12px;
+        margin-bottom: 12px;
+      }
+      .slide-title {
+        font-size: 25px;
+        margin-bottom: 14px;
+      }
+      .slide-subtitle {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .slide-motto {
+        margin-top: 20px;
+        padding: 14px 18px;
+      }
+      .slide-motto .motto-text {
+        font-size: 16px;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 18px;
+      }
+      .stat-card {
+        padding: 18px 10px;
+      }
+      .stat-number {
+        font-size: 34px;
+      }
+      .stat-label {
+        font-size: 11px;
+      }
+      .inaug-date {
+        margin-top: 18px;
+        padding: 12px 18px;
+      }
+      .inaug-date .id-value {
+        font-size: 16px;
+      }
+      .bullet-list {
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .bullet-list li {
+        font-size: 13px;
+        padding: 14px 16px;
+        gap: 12px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .card {
+        padding: 18px 16px;
+      }
+      .card-title {
+        font-size: 15px;
+      }
+      .card-body {
+        font-size: 12px;
+      }
+      .closing-slide {
+        padding: 36px 20px;
+        min-height: 540px;
+      }
+      .closing-slide .big-text {
+        font-size: 38px;
+      }
+      .closing-slide .sub-text {
+        font-size: 14px;
+      }
+      .thumb-section {
+        margin-top: 16px;
+      }
+      .thumb {
+        width: 72px;
+        height: 42px;
+      }
+      .key-hint {
+        display: none;
+      }
+    }
+
+    /* Small Mobile Phones (<= 400px) */
+    @media (max-width: 400px) {
+      .nav-bar {
+        padding: 6px 8px;
+        gap: 6px;
+      }
+      .nav-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+      .slide-title {
+        font-size: 21px;
+      }
+      .caption-title {
+        font-size: 18px;
+      }
+      .stats-grid {
+        gap: 8px;
+      }
+      .stat-card {
+        padding: 14px 8px;
+      }
+      .stat-number {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
@@ -1396,105 +1659,218 @@
     null, null
   ];
 
-  let isAnimating = false;
-
   function goTo(n, dir) {
-    if (n < 1 || n > TOTAL || n === current || isAnimating) return;
-    isAnimating = true;
+    if (n < 1 || n > TOTAL || n === current) return;
     const prevSlide = document.getElementById('slide-' + current);
     const nextSlide = document.getElementById('slide-' + n);
+    if (!prevSlide || !nextSlide) return;
 
-    // Determine direction for animation
     const goingForward = (dir !== undefined) ? dir > 0 : n > current;
 
-    // Animate out old slide
-    prevSlide.style.animation = goingForward
-      ? 'slideOutLeft 0.32s cubic-bezier(0.4, 0, 1, 1) both'
-      : 'slideOutRight 0.32s cubic-bezier(0.4, 0, 1, 1) both';
+    // Immediately remove active from previous slide
+    prevSlide.classList.remove('active');
+    prevSlide.style.animation = '';
 
-    setTimeout(() => {
-      prevSlide.classList.remove('active');
-      prevSlide.style.animation = '';
-      // Update thumbs
-      document.querySelectorAll('.thumb')[current-1].classList.remove('active');
-      current = n;
-      // Animate in new slide
-      nextSlide.style.animation = goingForward
-        ? 'slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) both'
-        : 'slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both';
-      nextSlide.classList.add('active');
-      document.querySelectorAll('.thumb')[current-1].classList.add('active');
-      scrollThumbIntoView(current-1);
+    // Update thumbnail indicator
+    const thumbs = document.querySelectorAll('.thumb');
+    if (thumbs[current - 1]) thumbs[current - 1].classList.remove('active');
+    if (thumbs[n - 1]) thumbs[n - 1].classList.add('active');
+    scrollThumbIntoView(n - 1);
 
-      const pct = ((current / TOTAL) * 100).toFixed(1) + '%';
-      document.getElementById('progress').style.width = pct;
-      document.getElementById('counter').textContent = current + ' / ' + TOTAL;
-      document.getElementById('btn-prev').disabled = current === 1;
-      document.getElementById('btn-next').disabled = current === TOTAL;
-      document.getElementById('slide-caption').innerHTML =
-        '<strong>Slide ' + current + ' of ' + TOTAL + '</strong> — ' + captions[current-1];
+    current = n;
 
-      setTimeout(() => {
-        nextSlide.style.animation = '';
-        isAnimating = false;
-      }, 500);
-    }, 300);
+    // Activate next slide with smooth entrance animation
+    nextSlide.classList.add('active');
+    nextSlide.style.animation = goingForward
+      ? 'slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) both'
+      : 'slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) both';
+
+    // Update progress bar & counter
+    const pct = ((current / TOTAL) * 100).toFixed(1) + '%';
+    const progressEl = document.getElementById('progress');
+    if (progressEl) progressEl.style.width = pct;
+    const counterEl = document.getElementById('counter');
+    if (counterEl) counterEl.textContent = current + ' / ' + TOTAL;
+
+    // Update navigation buttons state
+    const btnPrev = document.getElementById('btn-prev');
+    if (btnPrev) btnPrev.disabled = current === 1;
+    const btnNext = document.getElementById('btn-next');
+    if (btnNext) btnNext.disabled = current === TOTAL;
+
+    // Update caption
+    const captionEl = document.getElementById('slide-caption');
+    if (captionEl && captions[current - 1]) {
+      captionEl.innerHTML = '<strong>Slide ' + current + ' of ' + TOTAL + '</strong> — ' + captions[current - 1];
+    }
   }
 
-  function changeSlide(dir) { goTo(current + dir, dir); }
+  function changeSlide(dir) {
+    goTo(current + dir, dir);
+  }
 
   function scrollThumbIntoView(idx) {
     const strip = document.getElementById('thumb-strip');
+    if (!strip) return;
     const thumb = strip.children[idx];
     if (thumb) thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
   // Build thumbnails
   const strip = document.getElementById('thumb-strip');
-  for (let i = 0; i < TOTAL; i++) {
-    const t = document.createElement('div');
-    t.className = 'thumb' + (i === 0 ? ' active' : '');
-    t.title = 'Slide ' + (i+1);
-    if (thumbImages[i]) {
-      const img = document.createElement('img');
-      img.src = thumbImages[i];
-      img.alt = 'Slide ' + (i+1);
-      img.loading = 'lazy';
-      t.appendChild(img);
-    } else {
-      const num = document.createElement('span');
-      num.className = 'thumb-num';
-      num.textContent = i+1;
-      t.appendChild(num);
+  if (strip) {
+    for (let i = 0; i < TOTAL; i++) {
+      const t = document.createElement('div');
+      t.className = 'thumb' + (i === 0 ? ' active' : '');
+      t.title = 'Slide ' + (i + 1);
+      if (thumbImages[i]) {
+        const img = document.createElement('img');
+        img.src = thumbImages[i];
+        img.alt = 'Slide ' + (i + 1);
+        img.loading = 'lazy';
+        t.appendChild(img);
+      } else {
+        const num = document.createElement('span');
+        num.className = 'thumb-num';
+        num.textContent = i + 1;
+        t.appendChild(num);
+      }
+      t.addEventListener('click', () => goTo(i + 1, (i + 1) > current ? 1 : -1));
+      strip.appendChild(t);
     }
-    t.addEventListener('click', () => goTo(i+1, i+1 > current ? 1 : -1));
-    strip.appendChild(t);
   }
 
   // Keyboard navigation
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
-    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
-    if (e.key === 'Home') goTo(1, -1);
-    if (e.key === 'End')  goTo(TOTAL, 1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      changeSlide(-1);
+    } else if (e.key === 'Home') {
+      goTo(1, -1);
+    } else if (e.key === 'End') {
+      goTo(TOTAL, 1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      toggleFullscreen();
+    }
   });
 
-  // Fullscreen
+  // Touch Swipe for Mobile & Tablet
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+  const slideWrapper = document.querySelector('.slide-wrapper');
+
+  if (slideWrapper) {
+    slideWrapper.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+
+    slideWrapper.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].clientX;
+      touchEndY = e.changedTouches[0].clientY;
+      const dx = touchEndX - touchStartX;
+      const dy = touchEndY - touchStartY;
+      // Ensure horizontal swipe is dominant
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 35) {
+        if (dx < 0) {
+          changeSlide(1); // Swipe left -> Next slide
+        } else {
+          changeSlide(-1); // Swipe right -> Previous slide
+        }
+      }
+    }, { passive: true });
+
+    // Click on slide to advance
+    slideWrapper.addEventListener('click', e => {
+      if (!e.target.closest('button, a, .thumb')) {
+        changeSlide(1);
+      }
+    });
+  }
+
+  // Cross-Browser Fullscreen Handler (with mobile/safari fallback)
   function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-    } else {
-      document.exitFullscreen();
+    try {
+      const doc = document;
+      const docEl = doc.documentElement;
+      const isFull = !!(
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.mozFullScreenElement ||
+        doc.msFullscreenElement ||
+        document.body.classList.contains('css-fullscreen')
+      );
+
+      if (!isFull) {
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => enableCssFullscreen());
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
+        } else if (docEl.mozRequestFullScreen) {
+          docEl.mozRequestFullScreen();
+        } else if (docEl.msRequestFullscreen) {
+          docEl.msRequestFullscreen();
+        } else {
+          enableCssFullscreen();
+        }
+      } else {
+        if (doc.exitFullscreen && doc.fullscreenElement) {
+          doc.exitFullscreen().catch(() => {});
+        } else if (doc.webkitExitFullscreen && doc.webkitFullscreenElement) {
+          doc.webkitExitFullscreen();
+        } else if (doc.mozCancelFullScreen && doc.mozFullScreenElement) {
+          doc.mozCancelFullScreen();
+        } else if (doc.msExitFullscreen && doc.msFullscreenElement) {
+          doc.msExitFullscreen();
+        }
+        document.body.classList.remove('css-fullscreen');
+        const btn = document.querySelector('.btn-fullscreen');
+        if (btn) btn.textContent = '⛶';
+      }
+    } catch (err) {
+      console.warn("Fullscreen toggle error:", err);
+      enableCssFullscreen();
     }
   }
 
-  // Init — show slide 1 immediately without transition
-  document.getElementById('slide-1').classList.add('active');
-  document.querySelectorAll('.thumb')[0].classList.add('active');
-  document.getElementById('progress').style.width = ((1/TOTAL)*100).toFixed(1)+'%';
-  document.getElementById('counter').textContent = '1 / ' + TOTAL;
-  document.getElementById('btn-prev').disabled = true;
-  document.getElementById('slide-caption').innerHTML =
+  function enableCssFullscreen() {
+    document.body.classList.add('css-fullscreen');
+    const btn = document.querySelector('.btn-fullscreen');
+    if (btn) btn.textContent = '✕';
+  }
+
+  ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      const isFull = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const btn = document.querySelector('.btn-fullscreen');
+      if (btn) btn.textContent = isFull ? '✕' : '⛶';
+      if (!isFull) document.body.classList.remove('css-fullscreen');
+    });
+  });
+
+  // Init Slide 1
+  const firstSlide = document.getElementById('slide-1');
+  if (firstSlide) firstSlide.classList.add('active');
+  const firstThumb = document.querySelectorAll('.thumb')[0];
+  if (firstThumb) firstThumb.classList.add('active');
+
+  const initialPct = ((1 / TOTAL) * 100).toFixed(1) + '%';
+  const progressInit = document.getElementById('progress');
+  if (progressInit) progressInit.style.width = initialPct;
+
+  const counterInit = document.getElementById('counter');
+  if (counterInit) counterInit.textContent = '1 / ' + TOTAL;
+
+  const prevInit = document.getElementById('btn-prev');
+  if (prevInit) prevInit.disabled = true;
+
+  const captionInit = document.getElementById('slide-caption');
+  if (captionInit && captions[0]) {
+    captionInit.innerHTML = '<strong>Slide 1 of ' + TOTAL + '</strong> — ' + captions[0];
+  }
     '<strong>Slide 1 of ' + TOTAL + '</strong> — ' + captions[0];
 </script>
 </body>
